@@ -2,48 +2,55 @@ package home;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
 import java.io.IOException;
 
-//import static home.Dictionary.filename;
-import static home.Dictionary.filename;
-import static home.Dictionary.frame;
-
-public class Win extends JFrame{
-    JPanel panel1;
-    JTextField textField1;
-    private JButton button1;
+public class Win extends JFrame {
+    private JPanel panel1;
+    private JTextField textField1;
+    private JTextField textField2;
     private JButton startButton;
-    JFormattedTextField formattedTextField1;
+    private JButton button1;
+    private JButton button2;
+    private final JFrame frame = new JFrame("Dictionary builder");
 
     Win() {
 
-        button1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
-                FileDialog fd = new FileDialog(frame, "Choose file", FileDialog.LOAD);
-                Dictionary.filename = null;
-                fd.setDirectory("C:\\");
-                fd.setFile("*.*");
-                fd.setVisible(true);
-                Dictionary.filename = fd.getDirectory()+fd.getFile();
-                if (!Dictionary.filename.equals("C:\\null"))
-                    textField1.setText(Dictionary.filename);
-                else
-                    textField1.setText(">");
-                formattedTextField1.setText("");
-            }
+        final Dictionary d = new Dictionary();
+
+        button1.addActionListener(actionEvent -> {
+            FileDialog fd = new FileDialog(frame, "Choose file", FileDialog.LOAD);
+            fd.setDirectory("C:\\");
+            fd.setFile("*.*");
+            fd.setVisible(true);
+            String fName = fd.getDirectory()+fd.getFile();
+            d.setName(fName);
+            if (!fName.equals("nullnull"))
+                textField1.setText(fName);
+            else
+                textField1.setText(">");
+            textField2.setText("");
         });
 
-        startButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
-                if (!Dictionary.filename.isEmpty()) {
-                    try { Dictionary.sort(); }
-                    catch (IOException e) { }
-                }
-                formattedTextField1.setText("File " + filename + ".out created.");
-            }
+        startButton.addActionListener(actionEvent -> {
+            String fName = d.getName();
+            if (!fName.equals("nullnull")) {
+                try { d.sort(fName); }
+                catch (IOException e) { textField2.setText("File not found."); }
+            textField2.setText("File " + fName + ".out created."); }
         });
+
+        button2.addActionListener(actionEvent -> {
+            frame.setVisible(false);
+            frame.dispose();
+        });
+    }
+
+    void construct()
+    {
+        frame.setContentPane(panel1);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }
