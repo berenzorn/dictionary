@@ -1,75 +1,36 @@
 package home;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class FileSort {
-    private static char[] cyrillic = {'а','б','в','г','д','е','ё','ж','з','и','й','к','л','м','н',
-            'о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я'};
-
     List<String> sort(Set<String> arrayStrings) {
 
         Set<String> arrayWords = new HashSet<>();
-        Set<String> minusWords = new HashSet<>();
-        Set<String> plusWords = new HashSet<>();
+        Set<String> newWords = new HashSet<>();
+        StringBuilder sb = new StringBuilder();
 
-// Разбиваем строки на слова
         for (String stringCount : arrayStrings)
-        {
-            String[] words = stringCount.split(" ");
-            Collections.addAll(arrayWords, words);
+            sb.append(" ").append(stringCount);
+
+        sb.deleteCharAt(0);
+        String[] words = sb.toString().split(" ");
+        Collections.addAll(arrayWords, words);
+
+        Pattern p = Pattern.compile("[А-ЯЁёа-я][А-ЯЁёа-я-]+");
+        for (String minus : arrayWords) {
+            Matcher m = p.matcher(minus);
+            if (m.find())
+                newWords.add(m.group());
         }
 
-// Работаем с каждым словом по отдельности
-        for (String minus : arrayWords)
-            for (int j = 0; j < minus.length(); j++)
-                if (minus.charAt(j) == '-')
-                    minusWords.add(minus);
-
-// Убираем слова с минусами
-        for (String minus : minusWords)
-            arrayWords.remove(minus);
-
-        minusWords.clear();
-
-        for (String wordsCount : arrayWords) {
-            char[] buffer = wordsCount.toCharArray();
-            List<Character> arrayBuffer = new ArrayList<>();
-
-// Стринг в массив чаров, массив чаров в лист, чтоб не было дырок
-            for (char aBuffer : buffer)
-                arrayBuffer.add(aBuffer);
-// Работаем с каждой буквой по отдельности
-// сверяем букву с массивом кириллицы
-            for (int i = 0; i < arrayBuffer.size(); i++) {
-                boolean ok = false;
-                for (char aCyrillic : cyrillic)
-                    if (arrayBuffer.get(i).equals(aCyrillic))
-                        ok = true;
-// Если буква русская - ок, если нет - выкинуть
-                if (!ok)
-                    arrayBuffer.remove(i--);
-            }
-
-// Исправленный лист с русскими буквами обратно в массив чаров
-            char[] new_buffer = new char[arrayBuffer.size()];
-            for (int i = 0; i < arrayBuffer.size(); i++)
-                new_buffer[i] = arrayBuffer.get(i);
-            plusWords.add(String.valueOf(new_buffer));
-            minusWords.add(wordsCount);
-
-// Массив чаров в листы, слово заменить
-        }
-        for (String minus : minusWords)
-            arrayWords.remove(minus);
-        for (String plus : plusWords)
-            arrayWords.add(plus);
-
-        minusWords.clear();
-        arrayWords.remove("");
+        newWords.remove("");
+        newWords.remove("-");
 
         List<String> sortedWords = new ArrayList<>();
 
-        sortedWords.addAll(arrayWords);
+        sortedWords.addAll(newWords);
         Collections.sort(sortedWords);
         return sortedWords;
     }

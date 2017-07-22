@@ -33,6 +33,7 @@ public class Win extends JFrame {
 
         startButton.addActionListener(actionEvent -> {
             String fName = d.getName();
+
             if (!fName.equals("nullnull")) {
                 try { d.sort(fName); }
                 catch (IOException e) { textField2.setText("File not found."); }

@@ -14,17 +14,9 @@ class ReadFile {
 
         FileReader input = new FileReader(name);
         BufferedReader reader = new BufferedReader(input);
-// Читаем файлик построчно в сет
-        while (true) {
-            String currentString = reader.readLine();
-            if (currentString == null) break;
-            else {
-                currentString = currentString.toLowerCase();
-                arrayStrings.add(currentString);
-            }
-        }
+        while (reader.ready())
+            arrayStrings.add(reader.readLine());
         input.close();
         return arrayStrings;
     }
-
 }

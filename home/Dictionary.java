@@ -22,14 +22,13 @@ class Dictionary {
     }
 
     public static void main(String[] args) throws IOException {
-        if (!args[0].isEmpty()) {
-            fileName = args[0];
-            Dictionary d = new Dictionary();
-            d.sort(fileName);
-        }
-        else {
+        if (args.length == 0) {
             Win w = new Win();
             w.construct();
+        }
+        else {
+            Dictionary d = new Dictionary();
+            d.sort(args[0]);
         }
     }
 }
