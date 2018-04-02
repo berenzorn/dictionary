@@ -9,22 +9,13 @@ import java.util.Set;
 class ReadFile {
 
     Set<String> read(String name) throws IOException {
-
         Set<String> arrayStrings = new HashSet<>();
-
         FileReader input = new FileReader(name);
         BufferedReader reader = new BufferedReader(input);
-// Читаем файлик построчно в сет
-        while (true) {
-            String currentString = reader.readLine();
-            if (currentString == null) break;
-            else {
-                currentString = currentString.toLowerCase();
-                arrayStrings.add(currentString);
-            }
-        }
+//        С‡РёС‚Р°РµРј С„Р°Р№Р» РїРѕСЃС‚СЂРѕС‡РЅРѕ
+        while (reader.ready())
+            arrayStrings.add(reader.readLine());
         input.close();
         return arrayStrings;
     }
-
 }
